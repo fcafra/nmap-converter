@@ -30,9 +30,10 @@ def generate_hosts(workbook, sheet, report):
     sheet.autofilter("A1:E1")
     sheet.freeze_panes(1, 0)
 
-    hosts_header = ["Host", "IP", "Status", "Services", "OS"]
+    hosts_header = ["Host", "IP", "MAC", "Status", "Services", "OS"]
     hosts_body = {"Host": lambda host: next(iter(host.hostnames), ""),
                   "IP": lambda host: host.address,
+                  "MAC": lambda host: host.mac,
                   "Status": lambda host: host.status,
                   "Services": lambda host: len(host.services),
                   "OS": lambda host: os_class_string(host.os_class_probabilities())}
@@ -55,9 +56,10 @@ def generate_results(workbook, sheet, report):
     sheet.data_validation("N2:N$1048576", {"validate": "list",
                                            "source": ["Y", "N", "N/A"]})
 
-    results_header = ["Host", "IP", "Port", "Protocol", "Status", "Service", "Tunnel", "Method", "Confidence", "Reason", "Product", "Version", "Extra", "Flagged", "Notes"]
+    results_header = ["Host", "IP", "MAC", "Port", "Protocol", "Status", "Service", "Tunnel", "Method", "Confidence", "Reason", "Product", "Version", "Extra", "Flagged", "Notes"]
     results_body = {"Host": lambda host, service: next(iter(host.hostnames), ""),
                     "IP": lambda host, service: host.address,
+                    "MAC": lambda host, service: host.mac,
                     "Port": lambda host, service: service.port,
                     "Protocol": lambda host, service: service.protocol,
                     "Status": lambda host, service: service.state,
